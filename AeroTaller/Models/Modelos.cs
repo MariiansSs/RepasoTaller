@@ -4,16 +4,6 @@ public class Aeropuerto
     public string Codigo { get; set; } = "";      // IATA: "TUC"
     public string Ciudad { get; set; } = "";
     public string Nombre { get; set; } = "";
-
-    public Aeropuerto(){}
-
-    public Aeropuerto(int id, string codigo, string ciudad, string nombre)
-    {
-        this.Id = id;
-        this.Codigo = codigo;
-        this.Ciudad = ciudad;
-        this.Nombre = nombre;
-    }
     public override string ToString() => $"{Codigo} · {Ciudad}";
 }
 
@@ -56,17 +46,7 @@ public class Pasajero
     public int Id { get; set; }
     public string Nombre { get; set; } = "";
     public string Dni { get; set; } = "";
-    public string? Email { get; set; }        
-
-    public Pasajero(){}
-
-    public Pasajero(int id, string nom, string dni, string email)
-    {
-        this.Id = id;
-        this.Nombre = nom;
-        this.Dni = dni;
-        this.Email = email;
-    }    
+    public string? Email { get; set; }          
 }
 public enum EstadoReserva
 {

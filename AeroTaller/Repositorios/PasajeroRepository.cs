@@ -100,7 +100,7 @@ public class PasajeroRepository(string cadenaConexion)
         return Convert.ToInt32(comando.ExecuteScalar()) > 0;
     }
 
-    private static Pasajero LeerPasajero(SqliteDataReader lector, int desde) => new()
+    public static Pasajero LeerPasajero(SqliteDataReader lector, int desde) => new()
     {
         Id = lector.GetInt32(0),
         Nombre = lector.GetString(1),
