@@ -1,0 +1,41 @@
+-- Listado ordenado. Número, salida y precio de todos los vuelos, 
+-- del que sale primero al último.
+SELECT Numero, Salida, Precio
+FROM Vuelo
+ORDER BY Salida;
+
+--Buscar con LIKE. Los pasajeros cuyo nombre termina en "ez".
+SELECT Nombre, Dni
+FROM Pasajero
+WHERE Nombre LIKE '%ez';
+
+
+
+-- JOIN doble con alias. 
+--Cada vuelo con el código del aeropuerto de origen y el de destino (TUC → AEP).
+SELECT v.Numero, o.Codigo AS Origen, d.Codigo AS Destino, v.Salida
+FROM Vuelo v
+INNER JOIN Aeropuerto o ON v.OrigenId  = o.Id
+INNER JOIN Aeropuerto d ON v.DestinoId = d.Id
+ORDER BY v.Salida;
+
+-- Ocupación con LEFT JOIN y GROUP BY. 
+--Para cada vuelo: número, capacidad (Filas * 6) y cuántas reservas confirmadas tiene. 
+--Los vuelos sin reservas deben aparecer con 0.
+SELECT v.Numero, (v.Filas * 6) AS Capacidad, COUNT(r.Id) AS Ocupados
+FROM Vuelo v
+LEFT JOIN Reserva r ON v.Id = r.VueloId AND r.Estado = 'Confirmada'
+GROUP BY v.Id;
+
+-- UPDATE con WHERE. Bruno Díaz (Id 2) no tiene email: asignarle bruno.diaz@correo.com.
+UPDATE Pasajero
+SET Email = 'bruno.diaz@correo.com'
+WHERE Id = 2;
+
+SELECT * FROM Pasajero;
+
+-- DELETE con WHERE (y la integridad referencial). Primero intentar borrar a Ana Gómez (Id 1), 
+-- que tiene reservas. Después borrar la reserva cancelada (Id 5).
+DELETE FROM Pasajero WHERE Id = 1;
+DELETE FROM Reserva WHERE Id = 5;
+ 

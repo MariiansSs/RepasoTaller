@@ -6,4 +6,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="11.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+  <!-- El script de la base se copia junto al ejecutable: Program.cs lo usa si aerotaller.db no existe -->
+  <None Update="aerotaller.sql" CopyToOutputDirectory="PreserveNewest" />
+</ItemGroup>
+
 </Project>
