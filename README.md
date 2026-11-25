@@ -85,3 +85,5 @@ CONTRATO.md          ← nombres obligatorios
 4. Ejecutar `dotnet run --project verificador -- N` (o el botón Verificar) hasta obtener todos los chequeos aprobados.
 5. `git add -A` · `git commit -m "Desafío N: …"` · `git push` · comprobar el commit en GitHub.
 6. Responder el cuestionario y completar la escala: se habilita con el checklist completo y el cuestionario aprobado.
+
+## Gotardo Lucas Mariano - 45122970 - Lic. en Informatica
