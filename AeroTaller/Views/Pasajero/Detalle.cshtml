@@ -1,0 +1,41 @@
+@model Pasajero
+@{
+    ViewData["Title"] = Model.Nombre;
+    // ViewData almacena object: se convierte al tipo real. Si la clave no existe, se usa una lista vacía (así el foreach no falla)
+    var reservasDelPasajero = ViewData["Reservas"] as List<Reserva> ?? new List<Reserva>();
+}
+
+<h1>@Model.Nombre</h1>
+
+<dl class="ficha">
+    <dt>DNI</dt>   <dd>@Model.Dni</dd>
+    <dt>Email</dt> <dd>@(Model.Email ?? "—")</dd>
+</dl>
+
+<h2>Reservas</h2>
+@if (reservasDelPasajero.Count == 0)
+{
+    <p>Todavía no tiene reservas.</p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr><th>Vuelo</th><th>Ruta</th><th>Salida</th><th>Asiento</th><th>Estado</th></tr>
+        </thead>
+        <tbody>
+            @foreach (Reserva reserva in reservasDelPasajero)
+            {
+                <tr class="@(reserva.Estado == EstadoReserva.Cancelada ? "pasado" : "")">
+                    <td><a asp-controller="Vuelos" asp-action="Detalle" asp-route-id="@reserva.Vuelo.Id">@reserva.Vuelo.Numero</a></td>
+                    <td>@reserva.Vuelo.Origen.Codigo → @reserva.Vuelo.Destino.Codigo</td>
+                    <td>@reserva.Vuelo.Salida.ToString("dd/MM HH:mm")</td>
+                    <td>@reserva.Asiento</td>
+                    <td>@reserva.Estado</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<p><a asp-action="Index">← Volver a los pasajeros</a></p>

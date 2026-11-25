@@ -1,0 +1,22 @@
+@model Vuelo
+@{
+    ViewData["Title"] = $"Vuelo {Model.Numero}";
+}
+
+<h1>Vuelo @Model.Numero</h1>
+
+<dl class="ficha">
+    <dt>Ruta</dt>      <dd>@Model.Origen.Ciudad (@Model.Origen.Codigo) → @Model.Destino.Ciudad (@Model.Destino.Codigo)</dd>
+    <dt>Sale</dt>      <dd>@Model.Salida.ToString("dddd dd-MM-yyyy HH:mm")</dd>
+    <dt>Llega</dt>     <dd>@Model.Llegada.ToString("dddd dd-MM-yyyy HH:mm")</dd>
+    <dt>Duración</dt>  <dd>@(Model.DuracionMinutos / 60) h @(Model.DuracionMinutos % 60) min</dd>
+    <dt>Capacidad</dt> <dd>@Model.Capacidad asientos (@Model.Filas filas de 6)</dd>
+    <dt>Precio</dt>    <dd>@Model.Precio.ToString("C0")</dd>
+</dl>
+
+@if (Model.YaSalio)
+{
+    <p class="nota">Este vuelo ya salió: no admite reservas.</p>
+}
+
+<p><a asp-action="Index">← Volver a los vuelos</a></p>

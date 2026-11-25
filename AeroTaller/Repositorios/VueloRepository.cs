@@ -41,7 +41,7 @@ public class VueloRepository(string cadenaConexion)
         using var comando = new SqliteCommand(sql, conexion);
         comando.Parameters.AddWithValue("@id", id);
         using var lector = comando.ExecuteReader();
-        return lector.Read() ? LeerVuelo(lector, id) : null;
+        return lector.Read() ? LeerVuelo(lector, 0) : null;
     }
 
     public List<OcupacionVuelo> ListarOcupacion()

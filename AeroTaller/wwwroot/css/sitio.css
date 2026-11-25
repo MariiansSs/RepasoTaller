@@ -10,7 +10,7 @@ th, td { padding: 0.5rem 0.8rem; border-bottom: 1px solid #e1e5eb; text-align: l
 th { background: #eaf0f6; }
 dt { font-weight: 600; margin-top: 0.6rem; }
 dd { margin: 0; }
-a { color: #1d5fbf; }
+a { color: #1d5fbf; text-decoration: none;}
 .nota { color: #5b6573; }
 footer { max-width: 900px; margin: 3rem auto 1.5rem; padding: 0 1rem; color: #5b6573; font-size: 0.85rem; }
 .buscador, .filtros { display: flex; gap: 0.6rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; }

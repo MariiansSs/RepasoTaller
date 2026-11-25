@@ -1,7 +1,34 @@
+@model List<OcupacionVuelo> 
 @{
     ViewData["Title"] = "Inicio";
 }
 
-<h1>AeroTaller · proyecto base</h1>
-<p>El proyecto se ejecuta correctamente. El siguiente paso es abrir la Torre de Control y comenzar el desafío 0.</p>
-<p class="nota">En el desafío 3 esta página va a mostrar el tablero con la ocupación de los próximos vuelos.</p>
+<h1>Próximas salidas</h1>
+<p class="nota">Ocupación de cada vuelo: reservas confirmadas sobre la capacidad del avión.</p>
+
+<table>
+    <thead>
+        <tr><th>Vuelo</th><th>Ruta</th><th>Salida</th><th>Ocupación</th></tr>
+    </thead>
+    <tbody>
+        @foreach (OcupacionVuelo vuelo in Model)
+        {
+            <tr>
+                <td><a asp-controller="Vuelos" asp-action="Detalle" asp-route-id="@vuelo.VueloId">@vuelo.Numero</a></td>
+                <td>@vuelo.Ruta</td>
+                <td>@vuelo.Salida.ToString("ddd dd/MM HH:mm")</td>
+                <td>
+                    <div class="barra" title="@vuelo.Ocupados de @vuelo.Capacidad">
+                        <span style="width: @(vuelo.Porcentaje)%"></span>
+                    </div>
+                    @vuelo.Ocupados / @vuelo.Capacidad
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.Count == 0)
+{
+    <p>No hay vuelos programados.</p>
+}

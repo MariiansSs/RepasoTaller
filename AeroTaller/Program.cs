@@ -19,6 +19,10 @@ string cadenaConexion = builder.Configuration.GetConnectionString("AeroTaller")
     ?? throw new InvalidOperationException("Falta la cadena de conexion 'AeroTaller' en appsettings.json");
 CrearBaseSiNoExiste(cadenaConexion);
 // Desafío 3 y 7: registrar repositorios (y después servicios) en el contenedor
+builder.Services.AddScoped(_ => new AeropuertoRepository(cadenaConexion));
+builder.Services.AddScoped(_ => new VueloRepository(cadenaConexion));
+builder.Services.AddScoped(_ => new PasajeroRepository(cadenaConexion));
+builder.Services.AddScoped(_ => new ReservaRepository(cadenaConexion));
 // Desafío 8: Serilog
 // Desafío 9: sesión
 
