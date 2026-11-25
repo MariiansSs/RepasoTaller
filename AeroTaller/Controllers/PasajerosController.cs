@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 
-public class PasajeroController(PasajeroRepository pasajeros, ReservaRepository reservas) : Controller
+public class PasajerosController(PasajeroRepository pasajeros, ReservaRepository reservas) : Controller
 {
     public IActionResult Index(string? buscar)
     {
