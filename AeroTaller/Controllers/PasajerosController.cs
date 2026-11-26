@@ -9,21 +9,19 @@ public class PasajerosController(PasajeroRepository pasajeros, ReservaRepository
             ? pasajeros.Listar()
             : pasajeros.Buscar(buscar);
 
-        ViewData["Buscar"] = buscar;    // para que el buscador muestre lo que se buscó
+        ViewData["Buscar"] = buscar;  
         return View(lista);
     }
 
     public IActionResult Detalle(int id)
     {
-        Pasajero p = pasajeros.Obtener(id);
-        if(p == null)
+        Pasajero? pasajero = pasajeros.Obtener(id);
+        if (pasajero == null)
         {
             return NotFound();
-        }
+        } 
+        var modelo = new PasajeroDetalleViewModel(pasajero, reservas.ListarPorPasajero(id));
+        return View(modelo);            
 
-        ViewData["Reservas"] = reservas.ListarPorPasajero(id);
-
-        return View(p);
-        
     }
 }

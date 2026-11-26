@@ -1,0 +1,1 @@
+public record AsientoViewModel(string Codigo, bool Ocupado);

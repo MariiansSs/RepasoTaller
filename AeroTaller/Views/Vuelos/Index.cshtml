@@ -1,29 +1,39 @@
-@model List<Vuelo>
+@model VueloIndexViewModel
 @{
     ViewData["Title"] = "Vuelos";
 }
 
 <h1>Vuelos</h1>
 
+<form asp-action="Index" method="get" class="buscador">
+    <label asp-for="DestinoId"></label>
+    <select asp-for="DestinoId" asp-items="Model.Destinos">
+        <option value="">Todos</option>
+    </select>
+
+    <label asp-for="Desde"></label>
+    <input asp-for="Desde" />
+
+    <button type="submit">Buscar</button>
+    <a asp-action="Index">Limpiar</a>
+</form>
+
 <table>
     <thead>
-        <tr><th>Vuelo</th><th>Ruta</th><th>Sale</th><th>Llega</th><th>Precio</th></tr>
+        <tr><th>Vuelo</th><th>Ruta</th><th>Sale</th><th>Llega</th><th>Duración</th><th>Precio</th><th>Libres</th></tr>
     </thead>
     <tbody>
-        @foreach (Vuelo vuelo in Model)
+        @foreach (VueloListadoViewModel vuelo in Model.Resultados)
         {
             <tr class="@(vuelo.YaSalio ? "pasado" : "")">
                 <td><a asp-action="Detalle" asp-route-id="@vuelo.Id">@vuelo.Numero</a></td>
-                <td title="@vuelo.Origen.Ciudad → @vuelo.Destino.Ciudad">@vuelo.Origen.Codigo → @vuelo.Destino.Codigo</td>
-                <td>@vuelo.Salida.ToString("ddd dd/MM HH:mm")</td>
-                <td>@vuelo.Llegada.ToString("HH:mm")@(vuelo.LlegaAlOtroDia ? " (+1)" : "")</td>
-                <td>@vuelo.Precio.ToString("C0")</td>
+                <td title="@vuelo.Ciudades">@vuelo.Ruta</td>
+                <td>@vuelo.Salida</td>
+                <td>@vuelo.Llegada</td>
+                <td>@vuelo.Duracion</td>
+                <td>@vuelo.Precio</td>
+                <td>@(vuelo.YaSalio ? "salió" : vuelo.Libres.ToString())</td>
             </tr>
         }
     </tbody>
 </table>
-
-@if (Model.Count == 0)
-{
-    <p>No hay vuelos cargados.</p>
-}

@@ -36,7 +36,7 @@ public class VueloRepository(string cadenaConexion)
     INNER JOIN Aeropuerto o ON v.OrigenId  = o.Id
     INNER JOIN Aeropuerto d ON v.DestinoId = d.Id
     WHERE v.Id = @id
-    """;;
+    """; ;
 
         using var comando = new SqliteCommand(sql, conexion);
         comando.Parameters.AddWithValue("@id", id);
@@ -86,31 +86,38 @@ public class VueloRepository(string cadenaConexion)
         conexion.Open();
 
         var sql = """
-            SELECT v.Id, v.Numero, v.Salida, v.DuracionMinutos, v.Filas, v.Precio,
-                   o.Id, o.Codigo, o.Ciudad, o.Nombre,
-                   d.Id, d.Codigo, d.Ciudad, d.Nombre
-            FROM Vuelo v
-            INNER JOIN Aeropuerto o ON v.OrigenId  = o.Id
-            INNER JOIN Aeropuerto d ON v.DestinoId = d.Id
-            WHERE d.Id = @destinoId AND v.Salida >= @desde 
-            ORDER BY v.Salida
-            """;
+        SELECT v.Id, v.Numero, v.Salida, v.DuracionMinutos, v.Filas, v.Precio,
+               o.Id, o.Codigo, o.Ciudad, o.Nombre,
+               d.Id, d.Codigo, d.Ciudad, d.Nombre
+        FROM Vuelo v
+        INNER JOIN Aeropuerto o ON v.OrigenId = o.Id
+        INNER JOIN Aeropuerto d ON v.DestinoId = d.Id
+        WHERE (@destinoId IS NULL OR d.Id = @destinoId)
+          AND (@desde IS NULL OR v.Salida >= @desde)
+        ORDER BY v.Salida
+        """;
+
         using var comando = new SqliteCommand(sql, conexion);
-        comando.Parameters.AddWithValue("@destinoId",destinoId);
-        comando.Parameters.AddWithValue("@desde",desde);
+
+        comando.Parameters.AddWithValue("@destinoId",
+            destinoId.HasValue ? destinoId.Value : DBNull.Value);
+
+        comando.Parameters.AddWithValue("@desde",
+            desde.HasValue ? desde.Value : DBNull.Value);
+
         return LeerVuelos(comando);
     }
 
-        public bool ExisteNumero(string numero)
-        {
-            using var conexion = new SqliteConnection(cadenaConexion);
-            conexion.Open();
+    public bool ExisteNumero(string numero)
+    {
+        using var conexion = new SqliteConnection(cadenaConexion);
+        conexion.Open();
 
-            var sql = "SELECT COUNT(*) FROM Vuelo WHERE Numero = @numero";
-            using var comando = new SqliteCommand(sql, conexion);
-            comando.Parameters.AddWithValue("@numero",numero);
-            return Convert.ToInt32(comando.ExecuteScalar()) > 0;
-        }
+        var sql = "SELECT COUNT(*) FROM Vuelo WHERE Numero = @numero";
+        using var comando = new SqliteCommand(sql, conexion);
+        comando.Parameters.AddWithValue("@numero", numero);
+        return Convert.ToInt32(comando.ExecuteScalar()) > 0;
+    }
 
     public bool Insertar(Vuelo vuelo)
     {
@@ -123,14 +130,14 @@ public class VueloRepository(string cadenaConexion)
                   RETURNING Id
                   """;
         using var comando = new SqliteCommand(sql, conexion);
-        comando.Parameters.AddWithValue("@id",vuelo.Id);
-        comando.Parameters.AddWithValue("@numero",vuelo.Numero);
-        comando.Parameters.AddWithValue("@idOrigen",vuelo.Origen);
-        comando.Parameters.AddWithValue("@idDestino",vuelo.Destino);
+        comando.Parameters.AddWithValue("@id", vuelo.Id);
+        comando.Parameters.AddWithValue("@numero", vuelo.Numero);
+        comando.Parameters.AddWithValue("@idOrigen", vuelo.Origen);
+        comando.Parameters.AddWithValue("@idDestino", vuelo.Destino);
         comando.Parameters.AddWithValue("@salida", vuelo.Salida.ToString(FormatoFecha, CultureInfo.InvariantCulture));
-        comando.Parameters.AddWithValue("@duracion",vuelo.DuracionMinutos);
-        comando.Parameters.AddWithValue("@filas",vuelo.Filas);
-        comando.Parameters.AddWithValue("@precio",vuelo.Precio);
+        comando.Parameters.AddWithValue("@duracion", vuelo.DuracionMinutos);
+        comando.Parameters.AddWithValue("@filas", vuelo.Filas);
+        comando.Parameters.AddWithValue("@precio", vuelo.Precio);
         return Convert.ToInt32(comando.ExecuteScalar()) > 0;
     }
 
@@ -140,9 +147,9 @@ public class VueloRepository(string cadenaConexion)
 
         using var lector = comando.ExecuteReader();
 
-        while(lector.Read())
+        while (lector.Read())
         {
-            vuelos.Add(LeerVuelo(lector,0));
+            vuelos.Add(LeerVuelo(lector, 0));
         }
         return vuelos;
     }

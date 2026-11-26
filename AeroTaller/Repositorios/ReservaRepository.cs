@@ -9,7 +9,7 @@ public class ReservaRepository(string cadenaConexion)
         conexion.Open();
 
         var sql = """
-                  SELECT r.Id,r.Asiento,r.Fecha,r.Estado
+                  SELECT r.Id,r.Asiento,r.Fecha,r.Estado,
                          v.Id,v.Numero,v.Salida,v.DuracionMinutos,v.Filas,v.Precio,
                          o.Id, o.Codigo, o.Ciudad, o.Nombre,
                          d.Id, d.Codigo, d.Ciudad, d.Nombre,
@@ -22,6 +22,7 @@ public class ReservaRepository(string cadenaConexion)
                   WHERE Estado = @estado
                   """;
         using var comando = new SqliteCommand(sql, conexion);
+        comando.Parameters.AddWithValue("@estado", estado.ToString());
         return LeerReservas(comando);
     }
 
@@ -67,7 +68,7 @@ public class ReservaRepository(string cadenaConexion)
         using var conexion = new SqliteConnection(cadenaConexion);
         conexion.Open();
 
-        var sql = "SELECT Asiento FROM Reserva WHERE IdVuelo = @idVuelo AND Estado = confirmado";
+        var sql = "SELECT Asiento FROM Reserva WHERE VueloId = @idVuelo AND Estado = 'Confirmada'";
         using var comando = new SqliteCommand(sql,conexion);
         comando.Parameters.AddWithValue("@idVuelo",vueloId);
         using var lector = comando.ExecuteReader();
